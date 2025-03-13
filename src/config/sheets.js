@@ -40,7 +40,7 @@ export const insertInSheets = async (
 		await sheets.spreadsheets.values.append({
 			auth: client,
 			spreadsheetId: SPREADSHEET_ID,
-			range: `${nombreDeHoja}!A:G`, // Asegúrate de que el rango sea correcto
+			range: `${nombreDeHoja}!A1`, // Asegúrate de que el rango sea correcto
 			valueInputOption: "USER_ENTERED",
 			requestBody: {
 				values: valores,
