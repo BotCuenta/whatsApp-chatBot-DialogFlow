@@ -25,7 +25,7 @@ export const insertInSheets = async (
 		});
 
 		// Calcular el número de fila siguiente
-		const numFila = response.data.values ? response.data.values.length - 1 : 1;
+		const numFila = response.data.values ? response.data.values.length : 1;
 
 		// Generar código de reclamo basado en la fila
 		let codigoReclamoGenerado = `REC${numFila.toString().padStart(5, "0")}`; // Ejemplo: REC00001
@@ -45,7 +45,7 @@ export const insertInSheets = async (
 			],
 		];
 
-		valores[0][5] = codigoReclamoGenerado;
+	
 		// Escribir en Google Sheets
 		await sheets.spreadsheets.values.append({
 			auth: client,
@@ -53,7 +53,7 @@ export const insertInSheets = async (
 			range: `${nombreDeHoja}!A1`, // Google Sheets encuentra la primera fila vacía automáticamente
 			valueInputOption: "USER_ENTERED",
 			requestBody: {
-				values: [...valores],
+				values: valores,
 			},
 		});
 

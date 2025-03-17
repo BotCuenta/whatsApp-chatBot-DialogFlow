@@ -6,13 +6,12 @@ export const reclamosFlow = addKeyword(EVENTS.ACTION)
 		await flowDynamic(`Escribe más detalles sobre tu reclamo.`);
 	})
 	.addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
-		const { nombreCompleto, documento, area, reclamo } = state.getMyState();
+		const { nombreCompleto, documento, area } = state.getMyState();
 		const response = await insertInSheets(
 			{
 				nombreCompleto,
 				documento,
 				area,
-				reclamo,
 				telefono: ctx.from,
 				motivo: ctx.body,
 			},
