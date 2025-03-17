@@ -21,7 +21,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 	}
 
 	if (
-		response.queryResult.intent.displayName.startsWith("Reclamos") &&
+		response.queryResult.intent.displayName?.startsWith("Reclamos") &&
 		response.queryResult.intent.displayName != "Reclamos"
 	) {
 		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
@@ -60,7 +60,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 			additionalData = "Juventud";
 		} else if (intentName === "Reclamos - Defensoría Itinerante-5") {
 			additionalData = "Defensoría Itinerante";
-		} else if (intentName === "Reclamos - Derechos Del Inquilinos-2") {
+		} else if (intentName === "Reclamos - Derechos del Inquilino-2") {
 			additionalData = "Derechos de Inquilinos";
 		}
 
