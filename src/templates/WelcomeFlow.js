@@ -11,7 +11,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 
 	let response = await fetchDialogFlow(ctx.body, ctx.from);
 
-	console.log(response);
+	
 
 	/* Validamos si es que existe una respuesta por parte del agente de dialogFlow */
 	if (!response) {
@@ -19,6 +19,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 			"Oops, disculpe... Por el momento, no esta funcionando el sistema"
 		);
 	}
+	
 
 	if (
 		response.queryResult.intent.displayName.startsWith("Reclamos") &&
