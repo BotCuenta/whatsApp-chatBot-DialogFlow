@@ -20,6 +20,6 @@ export const reclamosFlow = addKeyword(EVENTS.ACTION)
 			"RECLAMOS"
 		);
 		await flowDynamic([
-			{ body: response, buttons: [{ body: "Volver al Inicio" }] },
+			{ body: response, buttons: [{ body: "Volver al Inicio" },{ body: "Abandonar" }] },
 		]);
 	});
