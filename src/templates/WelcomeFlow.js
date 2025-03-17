@@ -21,7 +21,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 	}
 
 	if (
-		response.queryResult.intent.displayName?.startsWith("Reclamos") &&
+		response.queryResult.intent.displayName.startsWith("Reclamos") &&
 		response.queryResult.intent.displayName != "Reclamos"
 	) {
 		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
