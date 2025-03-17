@@ -19,12 +19,19 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 			"Oops, disculpe... Por el momento, no esta funcionando el sistema"
 		);
 	}
-	
+
+	if (!response.queryResult.intent) {
+	    return ctxFn.flowDynamic(
+	        "No pude entender tu mensaje. ¿Podrías reformularlo?"
+	    );
+	}
+
 
 	if (
-		response.queryResult.intent.displayName.startsWith("Reclamos") &&
-		response.queryResult.intent.displayName != "Reclamos"
-	) {
+    response.queryResult.intent &&
+    response.queryResult.intent.displayName.startsWith("Reclamos") &&
+    response.queryResult.intent.displayName != "Reclamos"
+)  {
 		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
 		let documento = response.queryResult.parameters?.documento;
 
