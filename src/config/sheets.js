@@ -8,20 +8,29 @@ export const insertInSheets = async (
 ) => {
 	try {
 		const { GOOGLE_APPLICATION_CREDENTIALS_JSON, SPREADSHEET_ID } = process.env;
+		
 		// Autenticación con Google Sheets
 		const auth = new google.auth.GoogleAuth({
-			credentials: JSON.parse(GOOGLE_APPLICATION_CREDENTIALS_JSON), // Usa el JSON de las credenciales
+			credentials: JSON.parse(GOOGLE_APPLICATION_CREDENTIALS_JSON),
 			scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 		});
 
 		const client = await auth.getClient();
 
+		// Obtener la última fila ocupada
+		const response = await sheets.spreadsheets.values.get({
+			auth: client,
+			spreadsheetId: SPREADSHEET_ID,
+			range: `${nombreDeHoja}!A:A`, // Leer la columna A donde se guardan los datos
+		});
+
+		// Calcular el número de fila siguiente
+		const numFila = response.data.values ? response.data.values.length + 1 : 1;
+
+		// Generar código de reclamo basado en la fila
+		let codigoReclamoGenerado = `REC${numFila.toString().padStart(5, "0")}`; // Ejemplo: REC00001
+
 		// Preparar los valores para insertar en Google Sheets
-
-		let codigoReclamoGenerado = Math.round(Date.now() + Math.random())
-			.toString()
-			.slice(-8);
-
 		const valores = [
 			[
 				documento,
@@ -40,7 +49,7 @@ export const insertInSheets = async (
 		await sheets.spreadsheets.values.append({
 			auth: client,
 			spreadsheetId: SPREADSHEET_ID,
-			range: `${nombreDeHoja}!A1`, // Asegúrate de que el rango sea correcto
+			range: `${nombreDeHoja}!A1`, // Google Sheets encuentra la primera fila vacía automáticamente
 			valueInputOption: "USER_ENTERED",
 			requestBody: {
 				values: valores,
@@ -48,12 +57,12 @@ export const insertInSheets = async (
 		});
 
 		if (nombreDeHoja == "RECLAMOS") {
-			return `Tu reclamo se han guardado correctamente.\nTu codigo es: ${codigoReclamoGenerado} \nPronto se comunicarán contigo`;
+			return `Tu reclamo se ha guardado correctamente.\nTu código es: ${codigoReclamoGenerado} \nPronto se comunicarán contigo.`;
 		} else {
-			return "Tu comentarios se han guardado correctamente. \nPronto se comunicarán contigo";
+			return "Tus comentarios se han guardado correctamente. \nPronto se comunicarán contigo.";
 		}
 	} catch (error) {
-		console.error("Error fetching sheets response:", error.message);
-		return "Ocurrio un error al guardar. \nIntentalo más tarde";
+		console.error("Error al guardar en Sheets:", error.message);
+		return "Ocurrió un error al guardar. \nInténtalo más tarde.";
 	}
 };
