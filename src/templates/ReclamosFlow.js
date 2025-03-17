@@ -2,7 +2,7 @@ import { addKeyword, EVENTS } from "@builderbot/bot";
 import { insertInSheets } from "../config/sheets.js";
 
 export const reclamosFlow = addKeyword(EVENTS.ACTION)
-	.addAction(async (ctx, { flowDynamic }) => {
+	.addAction({ capture: true },async (ctx, { flowDynamic }) => {
 		await flowDynamic(`Escribe más detalles sobre tu reclamo.`);
 	})
 	.addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
