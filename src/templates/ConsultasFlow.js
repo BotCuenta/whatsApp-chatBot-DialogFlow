@@ -14,7 +14,7 @@ export const consultasFlow = addKeyword(EVENTS.ACTION)
             },
             "CONSULTAS"
         );
-        await flowDynamic([
+        return await flowDynamic([
 				{
 					header: "End",
 					body:

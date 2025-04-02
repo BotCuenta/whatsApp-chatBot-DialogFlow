@@ -79,7 +79,7 @@ export const subirSugerenciasFlow = addKeyword(EVENTS.ACTION)
 			},
 			"SUGERENCIAS"
 		);
-		await flowDynamic([
+		return await flowDynamic([
 			{ body: response, buttons: [{ body: "Volver al Inicio" },{ body: "Abandonar" }] },
 		]);
 	});
