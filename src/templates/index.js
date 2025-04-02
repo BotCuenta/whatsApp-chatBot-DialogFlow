@@ -1,6 +1,6 @@
 import { createFlow } from "@builderbot/bot";
 import { conversacionalFlow, endFlow, welcomeFlow } from "./WelcomeFlow.js";
-import { reclamosFlow } from "./ReclamosFlow.js";
+import { reclamosFlow, detalleReclamosFlow } from "./ReclamosFlow.js";
 import {
 	audioFlow,
 	locationFlow,
