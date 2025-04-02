@@ -15,7 +15,6 @@ export const detalleReclamosFlow = addKeyword(EVENTS.ACTION)
 				nombreCompleto,
 				documento,
 				area,
-				reclamo,
 				telefono: ctx.from,
 				motivo: ctx.body,
 			},

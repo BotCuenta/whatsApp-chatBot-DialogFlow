@@ -1,6 +1,7 @@
 import { addKeyword, EVENTS } from "@builderbot/bot";
 import { fetchDialogFlow } from "../config/dialogFlow.js";
 import { reclamosFlow } from "./ReclamosFlow.js";
+import {consultasFlow} from "./ConsultasFlow.js"
 
 /**
  * PLugin Configuration
@@ -22,10 +23,54 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 
 	if (!response.queryResult.intent) {
 	    return ctxFn.flowDynamic(
-	        "No pude entender tu mensaje. ¿Podrías reformularlo?"
+	        "¿Podrías recordarme tu nombre?"
 	    );
 	}
 
+	//detectar cuando se haga una consulta a un pregunta cargado en el dialogflow
+	if ( response.queryResult.intent &&
+    response.queryResult.intent.displayName.includes("¿") || response.queryResult.intent.displayName.includes("?")){
+		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
+		let documento = response.queryResult.parameters?.documento;
+		let area = response.queryResult.parameters?.areasEntity;
+		let consulta = response.queryResult.intent.displayName
+
+		if (!nombreCompleto || !documento) {
+			const contexts = response.queryResult.outputContexts || [];
+			contexts.forEach((context) => {
+				if (context.name.includes("bienvenido-followup")) {
+					const params = context.parameters;
+
+					nombreCompleto = params.fields.nombreCompleto.stringValue;
+					documento = params.fields.documento.stringValue;
+				}
+			});
+		}
+
+		if (!nombreCompleto || !documento || !area) {
+			return await flowDynamic([
+				{
+					header: "End",
+					body: "No existen los parámetros necesarios",
+					buttons: [{ body: "Volver al inicio" }],
+				},
+			]);
+		}
+
+		await state.update({
+			documento: documento,
+			nombreCompleto: nombreCompleto,
+			area: area,
+			consulta: consulta,
+			message: response.queryResult.fulfillmentMessages[1]?.payload.fields.response
+				.structValue.fields || response.queryResult.fulfillmentText,
+		});
+		return gotoFlow(consultasFlow);
+
+		
+	}
+
+	// detectar cuando un usuario quiere cargar un reclamo
 
 	if (
     response.queryResult.intent &&
@@ -76,6 +121,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 			documento: documento,
 			nombreCompleto: nombreCompleto,
 			area: additionalData,
+			
 		});
 		return gotoFlow(reclamosFlow);
 	}
