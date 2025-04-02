@@ -28,7 +28,12 @@ export const insertInSheets = async (
 		const numFila = response.data.values ? response.data.values.length : 1;
 
 		// Generar código de reclamo basado en la fila
-		let codigoReclamoGenerado = `REC${numFila.toString().padStart(5, "0")}`; // Ejemplo: REC00001
+		let codigoReclamoGenerado
+		if (nombreDeHoja == "RECLAMOS") {
+			codigoReclamoGenerado = `REC${numFila.toString().padStart(5, "0")}`; // Ejemplo: REC00001
+		}else if(nombreDeHoja == "SUGERENCIAS"){
+			codigoReclamoGenerado = `SUG${numFila.toString().padStart(5, "0")}`; // Ejemplo: SUG00001
+		}
 
 		// Preparar los valores para insertar en Google Sheets
 		const valores = [
@@ -41,7 +46,7 @@ export const insertInSheets = async (
 				}),
 				area,
 				motivo,
-				codigoReclamoGenerado,
+				codigoReclamoGenerado || 0,
 			],
 		];
 
@@ -59,7 +64,7 @@ export const insertInSheets = async (
 
 		if (nombreDeHoja == "RECLAMOS") {
 			return `Tu reclamo se ha guardado correctamente.\nTu código es: ${codigoReclamoGenerado} \nPronto se comunicarán contigo.`;
-		} else {
+		} else if (nombreDeHoja == "SUGERENCIAS") {
 			return "Tus comentarios se han guardado correctamente. \nPronto se comunicarán contigo.";
 		}
 	} catch (error) {

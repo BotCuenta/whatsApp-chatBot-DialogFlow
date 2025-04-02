@@ -5,7 +5,7 @@ export const consultasFlow = addKeyword(EVENTS.ACTION)
     .addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
         console.log(ctx.body)
         const { nombreCompleto, documento, area, consulta, message } = state.getMyState();
-        const response = await insertInSheets(
+        await insertInSheets(
             {
                 nombreCompleto,
                 documento,
