@@ -32,7 +32,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
     response.queryResult.intent.displayName.includes("¿") || response.queryResult.intent.displayName.includes("?")){
 		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
 		let documento = response.queryResult.parameters?.documento;
-		let area = response.queryResult.parameters?.areasEntity;
+		let area = response.queryResult.parameters?.areas.stringValue;
 		let consulta = response.queryResult.intent.displayName
 		console.log({parametros: response.queryResult.parameters})
 		if (!nombreCompleto || !documento) {
