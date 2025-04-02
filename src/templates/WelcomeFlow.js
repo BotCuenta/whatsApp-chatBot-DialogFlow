@@ -34,7 +34,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 		let documento = response.queryResult.parameters?.documento;
 		let area = response.queryResult.parameters?.areasEntity;
 		let consulta = response.queryResult.intent.displayName
-		console.log({response.queryResult.parameters})
+		console.log({parametros: response.queryResult.parameters})
 		if (!nombreCompleto || !documento) {
 			const contexts = response.queryResult.outputContexts || [];
 			contexts.forEach((context) => {
