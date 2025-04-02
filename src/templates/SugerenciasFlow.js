@@ -65,6 +65,7 @@ export const detalleSugerenciasFlow = addKeyword(EVENTS.ACTION)
 		await flowDynamic(`Escribe más detalles sobre tu sugerencia.`);
 		return gotoFlow(subirSugerenciasFlow);
 	})
+    
 export const subirSugerenciasFlow = addKeyword(EVENTS.ACTION)
 	.addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
 		const { nombreCompleto, documento, area } = state.getMyState();

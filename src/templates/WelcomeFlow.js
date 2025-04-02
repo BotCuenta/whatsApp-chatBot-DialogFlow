@@ -104,6 +104,12 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 				},
 			]);
 		}
+		await state.update({
+			documento: documento,
+			nombreCompleto: nombreCompleto,
+			
+			
+		});
 
 		return gotoFlow(sugerenciasFlow)
 	}
