@@ -33,6 +33,8 @@ export const insertInSheets = async (
 			codigoReclamoGenerado = `REC${numFila.toString().padStart(5, "0")}`; // Ejemplo: REC00001
 		}else if(nombreDeHoja == "SUGERENCIAS"){
 			codigoReclamoGenerado = `SUG${numFila.toString().padStart(5, "0")}`; // Ejemplo: SUG00001
+		}else if(nombreDeHoja == "CONSULTAS"){
+			codigoReclamoGenerado = `CON${numFila.toString().padStart(5, "0")}`; // Ejemplo: CON00001
 		}
 
 		// Preparar los valores para insertar en Google Sheets
@@ -46,7 +48,7 @@ export const insertInSheets = async (
 				}),
 				area,
 				motivo,
-				codigoReclamoGenerado || 0,
+				codigoReclamoGenerado,
 			],
 		];
 

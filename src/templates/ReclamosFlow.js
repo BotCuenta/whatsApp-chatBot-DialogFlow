@@ -9,7 +9,7 @@ export const reclamosFlow = addKeyword(EVENTS.ACTION)
 export const detalleReclamosFlow = addKeyword(EVENTS.ACTION)
 	.addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
 		console.log(ctx.body)
-		const { nombreCompleto, documento, area, reclamo } = state.getMyState();
+		const { nombreCompleto, documento, area} = state.getMyState();
 		const response = await insertInSheets(
 			{
 				nombreCompleto,

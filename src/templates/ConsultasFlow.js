@@ -2,8 +2,7 @@ import { addKeyword, EVENTS } from "@builderbot/bot";
 import { insertInSheets } from "../config/sheets.js";
 
 export const consultasFlow = addKeyword(EVENTS.ACTION)
-    .addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
-        console.log(ctx.body)
+    .addAction( async (ctx, { flowDynamic, state }) => {
         const { nombreCompleto, documento, area, consulta, message } = state.getMyState();
         await insertInSheets(
             {

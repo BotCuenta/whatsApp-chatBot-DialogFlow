@@ -2,6 +2,7 @@ import { addKeyword, EVENTS } from "@builderbot/bot";
 import { fetchDialogFlow } from "../config/dialogFlow.js";
 import { reclamosFlow } from "./ReclamosFlow.js";
 import {consultasFlow} from "./ConsultasFlow.js"
+import {sugerenciasFlow} from "./SugerenciasFlow.js"
 
 /**
  * PLugin Configuration
@@ -23,7 +24,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 
 	if (!response.queryResult.intent) {
 	    return ctxFn.flowDynamic(
-	        "¿Podrías recordarme tu nombre?"
+			"¿Podrías recordarme tu nombre?"
 	    );
 	}
 
@@ -70,6 +71,41 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 		return gotoFlow(consultasFlow);
 
 		
+	}
+
+	// Detectar cuando un usuario quiera cargar una sugerencia
+	if (
+    response.queryResult.intent &&
+    response.queryResult.intent.displayName == "Sugerencias" 
+)  {
+		console.log("Entre");
+		
+		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
+		let documento = response.queryResult.parameters?.documento;
+
+		if (!nombreCompleto || !documento) {
+			const contexts = response.queryResult.outputContexts || [];
+			contexts.forEach((context) => {
+				if (context.name.includes("bienvenido-followup")) {
+					const params = context.parameters;
+
+					nombreCompleto = params.fields.nombreCompleto.stringValue;
+					documento = params.fields.documento.stringValue;
+				}
+			});
+		}
+
+		if (!nombreCompleto || !documento) {
+			return await flowDynamic([
+				{
+					header: "End",
+					body: "No existen los parámetros necesarios",
+					buttons: [{ body: "Volver al inicio" }],
+				},
+			]);
+		}
+
+		return gotoFlow(sugerenciasFlow)
 	}
 
 	// detectar cuando un usuario quiere cargar un reclamo
