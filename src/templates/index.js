@@ -17,4 +17,5 @@ export default createFlow([
 	locationFlow,
 	mediaFlow,
 	documentFlow,
+	detalleReclamosFlow
 ]);
