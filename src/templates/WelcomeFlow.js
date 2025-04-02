@@ -30,12 +30,13 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 	//detectar cuando se haga una consulta a un pregunta cargado en el dialogflow
 	if ( response.queryResult.intent &&
     response.queryResult.intent.displayName.includes("¿") || response.queryResult.intent.displayName.includes("?")){
+		console.log(JSON.stringify(response.queryResult.parameters?.area))
 		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
 		let documento = response.queryResult.parameters?.documento;
-		let area = response.queryResult.parameters?.area.stringValue || response.queryResult.parameters?.areas.stringValue || "Sin identificar";
+		let area = response.queryResult.parameters?.area || response.queryResult.parameters?.areas.stringValue || "Sin identificar";
 		let consulta = response.queryResult.intent.displayName
 
-		console.log(JSON.stringify(response.queryResult.parameters?.area))
+
 
 		if (!nombreCompleto || !documento) {
 			const contexts = response.queryResult.outputContexts || [];
