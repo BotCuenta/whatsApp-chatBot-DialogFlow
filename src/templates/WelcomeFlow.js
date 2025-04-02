@@ -33,7 +33,6 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 		console.log(JSON.stringify(response.queryResult.parameters?.area))
 		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
 		let documento = response.queryResult.parameters?.documento;
-		let area = response.queryResult.parameters?.area || response.queryResult.parameters?.areas.stringValue || "Sin identificar";
 		let consulta = response.queryResult.intent.displayName
 
 
@@ -50,7 +49,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 			});
 		}
 
-		if (!nombreCompleto || !documento || !area) {
+		if (!nombreCompleto || !documento ) {
 			return await flowDynamic([
 				{
 					header: "End",
@@ -63,7 +62,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 		await state.update({
 			documento: documento,
 			nombreCompleto: nombreCompleto,
-			area: area,
+			area: "-",
 			consulta: consulta,
 			message: response.queryResult.fulfillmentMessages[1]?.payload.fields.response
 				.structValue.fields || response.queryResult.fulfillmentText,
