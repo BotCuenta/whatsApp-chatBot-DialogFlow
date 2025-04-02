@@ -78,7 +78,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
     response.queryResult.intent &&
     response.queryResult.intent.displayName == "Sugerencias" 
 )  {
-		console.log("Entre");
+		
 		
 		let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
 		let documento = response.queryResult.parameters?.documento;

@@ -3,7 +3,7 @@ import { insertInSheets } from "../config/sheets.js";
 
 export const sugerenciasFlow = addKeyword(EVENTS.ACTION)
 	.addAction(async (ctx, { provider, gotoFlow })=>{
-		console.log("sugenrencia")
+		
 		const list = {
 					type: "list",
 					header: {
