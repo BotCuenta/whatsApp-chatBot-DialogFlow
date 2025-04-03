@@ -10,7 +10,7 @@ import { sugerenciasFlow } from "./SugerenciasFlow.js";
 
 const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
   const { state, gotoFlow, flowDynamic } = ctxFn;
-  const currentState = state.getMyState();
+      const currentState = state.getMyState() || {}; 
  if (currentState.inReclamoFlow) {
     return gotoFlow(reclamosFlow);
   }
