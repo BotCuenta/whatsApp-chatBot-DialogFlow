@@ -55,12 +55,12 @@ export const reclamosFlow = addKeyword(EVENTS.ACTION)
           }
         ]);
         // Al finalizar, limpiar el flag del flujo de reclamos para que la próxima interacción se procese en welcomeFlow
-        await state.update({ inReclamoFlow: false, detalleReclamo: undefined });
+         await state.update({ inReclamoFlow: false, detalleReclamo: undefined });
         return;
       } catch (error) {
         console.error("Error al insertar en Sheets:", error);
         await flowDynamic("Lo siento, ocurrió un error al intentar guardar tu reclamo. Por favor, inténtalo de nuevo más tarde.");
-        await state.update({ inReclamoFlow: false });
+         await state.update({ inReclamoFlow: false, detalleReclamo: undefined });
         return;
       }
     }
