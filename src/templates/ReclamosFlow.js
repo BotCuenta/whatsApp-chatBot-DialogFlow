@@ -1,4 +1,4 @@
-import { addKeyword } from "@builderbot/bot";
+import { addKeyword,EVENTS  } from "@builderbot/bot";
 import { insertInSheets } from "../config/sheets.js";
 
 // Flujo de reclamos
@@ -20,7 +20,7 @@ export const reclamosFlow = addKeyword("reclamo")
   });
 
 // Flujo para pedir el área con una lista desplegable
-export const pedirAreaFlow = addKeyword("")
+export const pedirAreaFlow = addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { provider }) => {
     const list = {
       type: "list",
@@ -67,7 +67,7 @@ export const pedirAreaFlow = addKeyword("")
   });
 
 // Flujo para pedir el motivo del reclamo
-export const pedirMotivoFlow = addKeyword("")
+export const pedirMotivoFlow = addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { flowDynamic }) => {
     await flowDynamic("Describe brevemente tu reclamo:");
   })
@@ -84,7 +84,7 @@ export const pedirMotivoFlow = addKeyword("")
   });
 
 // Flujo para pedir el nombre completo
-export const pedirNombreFlow = addKeyword("")
+export const pedirNombreFlow = addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { flowDynamic }) => {
     await flowDynamic("Escribe tu nombre completo:");
   })
@@ -101,16 +101,16 @@ export const pedirNombreFlow = addKeyword("")
   });
 
 // Flujo para pedir el documento
-export const pedirDocumentoFlow = addKeyword("")
+export const pedirDocumentoFlow = addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { flowDynamic }) => {
-    await flowDynamic("Ingresa tu número de documento (8 dígitos o formato 99.999.999):");
+    await flowDynamic("Ingresa tu número de documento con el formato 99.999.999:");
   })
   .addAction({ capture: true }, async (ctx, { flowDynamic, state,gotoFlow  }) => {
     const documento = ctx.body.trim();
     const formatoValido = /^\d{8}$|^\d{2}\.\d{3}\.\d{3}$/.test(documento);
 
     if (!formatoValido) {
-      await flowDynamic("⚠️ Formato inválido. Usa 8 dígitos (ej: 12345678) o el formato 99.999.999.");
+      await flowDynamic("⚠️ Formato inválido. Usa el formato 99.999.999.");
       return gotoFlow(pedirDocumentoFlow);
     }
 
@@ -121,7 +121,7 @@ export const pedirDocumentoFlow = addKeyword("")
   });
 
 // Flujo para guardar el reclamo
-export const guardarReclamoFlow = addKeyword("")
+export const guardarReclamoFlow = addKeyword(EVENTS.ACTION)
   .addAction(async (ctx, { flowDynamic, state }) => {
     const { nombreCompleto, documento, area, motivo } = state.getMyState();
     
