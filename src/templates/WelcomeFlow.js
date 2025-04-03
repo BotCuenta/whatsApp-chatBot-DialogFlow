@@ -9,13 +9,15 @@ import { sugerenciasFlow } from "./SugerenciasFlow.js";
  */
 
 const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
-  const { state, gotoFlow, flowDynamic } = ctxFn;
-      const currentState = state.getMyState() || {}; 
- if (currentState.inReclamoFlow) {
+ const { state, gotoFlow, flowDynamic } = ctxFn;
+  const currentState = state.getMyState() || {}; 
+  let response; // <-- Declarar la variable antes
+
+  if (currentState.inReclamoFlow) {
     return gotoFlow(reclamosFlow);
-  }else{
-  
-  let response = await fetchDialogFlow(ctx.body, ctx.from);}
+  } else {
+    response = await fetchDialogFlow(ctx.body, ctx.from); // <-- Asignar el valor aquí
+  }
 
   /* Validamos si es que existe una respuesta por parte del agente de dialogFlow */
   if (!response) {
