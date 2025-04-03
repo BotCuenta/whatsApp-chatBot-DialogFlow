@@ -46,7 +46,7 @@ export const pedirAreaFlow = addKeyword("")
 
     await provider.sendList(ctx.from, list);
   })
-  .addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
+  .addAction({ capture: true }, async (ctx, { flowDynamic, state,gotoFlow }) => {
     const areaSeleccionada = ctx.body.trim();
     const AREAS_VALIDAS = [
       "Defensa al Consumidor",
@@ -71,7 +71,7 @@ export const pedirMotivoFlow = addKeyword("")
   .addAction(async (ctx, { flowDynamic }) => {
     await flowDynamic("Describe brevemente tu reclamo:");
   })
-  .addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
+  .addAction({ capture: true }, async (ctx, { flowDynamic, state,gotoFlow  }) => {
     const motivo = ctx.body.trim();
     if (!motivo) {
       await flowDynamic("⚠️ No entendí tu mensaje. Escribe los detalles de tu reclamo.");
@@ -88,7 +88,7 @@ export const pedirNombreFlow = addKeyword("")
   .addAction(async (ctx, { flowDynamic }) => {
     await flowDynamic("Escribe tu nombre completo:");
   })
-  .addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
+  .addAction({ capture: true }, async (ctx, { flowDynamic, state,gotoFlow  }) => {
     const nombreCompleto = ctx.body.trim();
     if (!nombreCompleto.includes(" ")) {
       await flowDynamic("⚠️ Ingresa tu nombre y apellido.");
@@ -105,7 +105,7 @@ export const pedirDocumentoFlow = addKeyword("")
   .addAction(async (ctx, { flowDynamic }) => {
     await flowDynamic("Ingresa tu número de documento (8 dígitos o formato 99.999.999):");
   })
-  .addAction({ capture: true }, async (ctx, { flowDynamic, state }) => {
+  .addAction({ capture: true }, async (ctx, { flowDynamic, state,gotoFlow  }) => {
     const documento = ctx.body.trim();
     const formatoValido = /^\d{8}$|^\d{2}\.\d{3}\.\d{3}$/.test(documento);
 
