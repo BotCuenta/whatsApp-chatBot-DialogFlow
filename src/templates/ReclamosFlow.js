@@ -4,24 +4,18 @@ import { insertInSheets } from "../config/sheets.js";
 // Flujo para manejar los reclamos
 export const reclamosFlow = addKeyword(EVENTS.ACTION)
   .addAction(
-    // Acción 1: Solicitar el detalle y reiniciar variables específicas
     async (ctx, { flowDynamic, state }) => {
       console.log("Iniciando reclamosFlow: solicitando detalle de reclamo.");
-      // Reiniciamos la variable para evitar datos residuales
-      await state.update({ detalleReclamo: undefined });
+      await state.update({ detalleReclamo: undefined }); // Reiniciamos solo esta variable
       await flowDynamic("Escribe más detalles sobre tu reclamo.");
     }
   )
   .addAction(
-    // Acción 2: Capturar y procesar el detalle del reclamo
     { capture: true },
     async (ctx, { flowDynamic, state }) => {
       const detalleReclamo = ctx.body ? ctx.body.trim() : "";
       console.log("Detalle recibido:", detalleReclamo);
 
-      
-
-      // Obtener datos previamente almacenados en el estado (de welcomeFlow)
       const { nombreCompleto, documento, area } = state.getMyState();
       if (!nombreCompleto || !documento || !area) {
         console.error("Error: Faltan datos del estado en reclamosFlow", { nombreCompleto, documento, area });
@@ -30,7 +24,6 @@ export const reclamosFlow = addKeyword(EVENTS.ACTION)
       }
 
       try {
-        // Insertar los datos en Sheets
         const response = await insertInSheets(
           {
             nombreCompleto,
@@ -41,23 +34,42 @@ export const reclamosFlow = addKeyword(EVENTS.ACTION)
           },
           "RECLAMOS"
         );
+
         await flowDynamic([
           {
             body: response,
             buttons: [
-              { body: "Volver al Inicio" },
-              { body: "Abandonar" }
+              { body: "Hacer otro reclamo" },
+              { body: "Volver al Inicio" }
             ]
           }
         ]);
-        // Al finalizar, limpiar el flag del flujo de reclamos para que la próxima interacción se procese en welcomeFlow
-         await state.update({ inReclamoFlow: false, detalleReclamo: undefined });
         
+        // Limpia solo `detalleReclamo`, pero mantiene `inReclamoFlow`
+        await state.update({ detalleReclamo: undefined });
+
       } catch (error) {
         console.error("Error al insertar en Sheets:", error);
         await flowDynamic("Lo siento, ocurrió un error al intentar guardar tu reclamo. Por favor, inténtalo de nuevo más tarde.");
-         await state.update({ inReclamoFlow: false, detalleReclamo: undefined });
-        
+      }
+    }
+  )
+  .addAnswer(
+    "¿En qué más puedo ayudarte?",
+    { capture: true },
+    async (ctx, { state, flowDynamic }) => {
+      const mensaje = ctx.body.toLowerCase();
+
+      if (mensaje === "hacer otro reclamo") {
+        console.log("Usuario quiere hacer otro reclamo.");
+        await flowDynamic("Por favor, escribe los detalles de tu nuevo reclamo.");
+        return;
+      }
+
+      if (mensaje === "volver al inicio") {
+        console.log("Usuario vuelve al inicio.");
+        await state.update({ inReclamoFlow: false }); // Ahora sí limpiamos `inReclamoFlow`
+        await flowDynamic("Te hemos llevado al inicio. ¿En qué más podemos ayudarte?");
       }
     }
   );
