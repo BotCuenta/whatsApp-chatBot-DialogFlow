@@ -13,9 +13,9 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
       const currentState = state.getMyState() || {}; 
  if (currentState.inReclamoFlow) {
     return gotoFlow(reclamosFlow);
-  }
+  }else{
   
-  let response = await fetchDialogFlow(ctx.body, ctx.from);
+  let response = await fetchDialogFlow(ctx.body, ctx.from);}
 
   /* Validamos si es que existe una respuesta por parte del agente de dialogFlow */
   if (!response) {
