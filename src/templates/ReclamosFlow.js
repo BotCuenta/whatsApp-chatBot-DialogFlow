@@ -3,7 +3,7 @@ import { insertInSheets } from "../config/sheets.js";
 
 // Flujo de reclamos
 export const reclamosFlow = addKeyword("reclamo")
-  .addAction(async (ctx, { flowDynamic, state }) => {
+  .addAction(async (ctx, { flowDynamic, state,gotoFlow }) => {
     console.log("📌 Iniciando reclamo...");
 
     // Reiniciar datos previos
