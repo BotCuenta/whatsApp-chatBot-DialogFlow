@@ -10,17 +10,7 @@ import { sugerenciasFlow } from "./SugerenciasFlow.js";
 
 const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
   const { state, gotoFlow, flowDynamic } = ctxFn;
-  const currentState = state.getMyState();
-
-  // Si ya estamos en medio de un reclamo, redirigir directamente al flujo de reclamos
-  if (currentState?.inReclamoFlow) {
-    return gotoFlow(reclamosFlow);
-  }
-
-  // 🔴 NUEVO: Verificar si el usuario está en un flujo de reclamos antes de consultar Dialogflow
-  if (currentState?.inReclamoFlow) {
-    return gotoFlow(reclamosFlow);
-  }
+ 
   let response = await fetchDialogFlow(ctx.body, ctx.from);
 
   /* Validamos si es que existe una respuesta por parte del agente de dialogFlow */
