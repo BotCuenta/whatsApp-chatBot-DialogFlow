@@ -19,11 +19,7 @@ export const reclamosFlow = addKeyword(EVENTS.ACTION)
       const detalleReclamo = ctx.body ? ctx.body.trim() : "";
       console.log("Detalle recibido:", detalleReclamo);
 
-      // Validación: el detalle debe tener al menos 10 caracteres y no ser la palabra "reclamo"
-      if (!detalleReclamo || detalleReclamo.length < 10 || detalleReclamo.toLowerCase() === "reclamo") {
-        await flowDynamic("Por favor, necesito que me des más detalles sobre tu reclamo para poder registrarlo.");
-        return;
-      }
+      
 
       // Obtener datos previamente almacenados en el estado (de welcomeFlow)
       const { nombreCompleto, documento, area } = state.getMyState();
@@ -56,12 +52,12 @@ export const reclamosFlow = addKeyword(EVENTS.ACTION)
         ]);
         // Al finalizar, limpiar el flag del flujo de reclamos para que la próxima interacción se procese en welcomeFlow
          await state.update({ inReclamoFlow: false, detalleReclamo: undefined });
-        return;
+        
       } catch (error) {
         console.error("Error al insertar en Sheets:", error);
         await flowDynamic("Lo siento, ocurrió un error al intentar guardar tu reclamo. Por favor, inténtalo de nuevo más tarde.");
          await state.update({ inReclamoFlow: false, detalleReclamo: undefined });
-        return;
+        
       }
     }
   );
