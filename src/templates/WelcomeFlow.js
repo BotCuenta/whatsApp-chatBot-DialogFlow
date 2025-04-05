@@ -84,18 +84,16 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
       contexts.forEach((context) => {
         if (context.name.includes("bienvenido-followup")) {
           const params = context.parameters;
-          nombreCompleto = params.fields.nombreCompleto.stringValue;
-          documento = params.fields.documento.stringValue;
+          nombreCompleto = params.fields.nombreCompleto?.stringValue;
+          documento = params.fields.documento?.stringValue;
+          area = params.fields.areasentity?.stringValue;
         }
-        if (context.name.includes("sugerencias-area-followup")){
-          const params = context.parameters;
-          area = params.fields.areasentity.stringValue;
-        }
+
       });
     }
 
     if (!nombreCompleto || !documento || !area) {
-      console.log(nombreCompleto +" "+ documento+" " + area + " " + motivo)
+      console.log(`${nombreCompleto} ${documento} ${area} ${motivo}`);
       return await flowDynamic([
         {
           header: "End",
