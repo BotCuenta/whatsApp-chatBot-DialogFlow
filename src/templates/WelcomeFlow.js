@@ -76,8 +76,9 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
     let nombreCompleto 
     let documento 
     let area
-    let motivo = response.queryResult.queryText 
-
+    let motivo = response.queryResult.queryText || "(CORREGIR TEXTQUERY)"
+    console.log(JSON.stringify(response.queryResult));
+    
     if (!nombreCompleto || !documento) {
       const contexts = response.queryResult.outputContexts || [];
       contexts.forEach((context) => {
@@ -86,7 +87,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
           nombreCompleto = params.fields.nombreCompleto.stringValue;
           documento = params.fields.documento.stringValue;
         }
-        if (context.name.includes("sugerencias-followup")){
+        if (context.name.includes("sugerencias-area-followup")){
           const params = context.parameters;
           area = params.fields.areasentity.stringValue;
         }
@@ -94,7 +95,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
     }
 
     if (!nombreCompleto || !documento || !area) {
-      console.log(nombreCompleto +" "+ documento+" " + area)
+      console.log(nombreCompleto +" "+ documento+" " + area + " " + motivo)
       return await flowDynamic([
         {
           header: "End",
@@ -105,8 +106,8 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
     await state.update({
       documento: documento,
       nombreCompleto: nombreCompleto,
-      area: area || " (CORREGIR)",
-      motivo: motivo || "(CORREGIR TEXTQUERY)"
+      area: area ,
+      motivo
     });
 
     return gotoFlow(sugerenciasFlow);
