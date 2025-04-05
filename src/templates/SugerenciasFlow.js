@@ -4,7 +4,7 @@ import { insertInSheets } from "../config/sheets.js";
 
 export const sugerenciasFlow = addKeyword(EVENTS.ACTION).addAction(
 		async (ctx, { flowDynamic,state }) => {
-			const { nombreCompleto, documento, area } = state.getMyState();
+			const { nombreCompleto, documento, area, motivo } = state.getMyState();
 			const response = await insertInSheets(
 				{
 					nombreCompleto,

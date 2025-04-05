@@ -10,14 +10,9 @@ import { sugerenciasFlow } from "./SugerenciasFlow.js";
 
 const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
  const { state, gotoFlow, flowDynamic } = ctxFn;
-  const currentState = state.getMyState() || {}; 
-  let response; // <-- Declarar la variable antes
 
-  if (currentState.inReclamoFlow) {
-    return gotoFlow(reclamosFlow);
-  } else {
-    response = await fetchDialogFlow(ctx.body, ctx.from); // <-- Asignar el valor aquí
-  }
+  let response = await fetchDialogFlow(ctx.body, ctx.from); // <-- Asignar el valor aquí
+  
 
   /* Validamos si es que existe una respuesta por parte del agente de dialogFlow */
   if (!response) {
@@ -81,7 +76,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
     let nombreCompleto 
     let documento 
     let area
-    let motivo = response.queryResult.queryText || "Ocurrio un error al cargar la sugerencia" 
+    let motivo = response.queryResult.queryText 
 
     if (!nombreCompleto || !documento) {
       const contexts = response.queryResult.outputContexts || [];
@@ -99,6 +94,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
     }
 
     if (!nombreCompleto || !documento || !area) {
+      console.log(nombreCompleto +" "+ documento+" " + area)
       return await flowDynamic([
         {
           header: "End",
@@ -110,7 +106,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
       documento: documento,
       nombreCompleto: nombreCompleto,
       area: area || " (CORREGIR)",
-      motivo
+      motivo: motivo || "(CORREGIR TEXTQUERY)"
     });
 
     return gotoFlow(sugerenciasFlow);
