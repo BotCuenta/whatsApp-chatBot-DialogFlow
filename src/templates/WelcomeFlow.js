@@ -90,7 +90,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
           nombreCompleto = params.fields.nombreCompleto.stringValue;
           documento = params.fields.documento.stringValue;
         }
-        if (context.name,includes("sugerencias-followup")){
+        if (context.name.includes("sugerencias-followup")){
           const params = context.parameters;
           area = params.fields.areasentity.stringValue;
         }
