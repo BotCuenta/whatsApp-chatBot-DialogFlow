@@ -2,8 +2,7 @@ import { addKeyword, EVENTS } from "@builderbot/bot";
 import { insertInSheets } from "../config/sheets.js";
 
 
-export const sugerenciasFlow = addKeyword(EVENTS.ACTION).addAnswer("Listo!! Escribe tu sugerencia...",
-		{ capture: true },
+export const sugerenciasFlow = addKeyword(EVENTS.ACTION).addAction(
 		async (ctx, { flowDynamic,state }) => {
 			const { nombreCompleto, documento, area } = state.getMyState();
 			const response = await insertInSheets(
@@ -12,7 +11,7 @@ export const sugerenciasFlow = addKeyword(EVENTS.ACTION).addAnswer("Listo!! Escr
 					documento,
 					area,
 					telefono: ctx.from,
-					motivo: ctx.body,
+					motivo,
 				},
 				"SUGERENCIAS"
 			);

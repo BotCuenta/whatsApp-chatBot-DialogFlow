@@ -76,11 +76,12 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 
   // Detectar cuando un usuario quiera cargar una sugerencia
   if (
-    response.queryResult.intent.displayName == "Sugerencias - area"
+    response.queryResult.intent.displayName == "Sugerencias - area - detalle"
   ) {
     let nombreCompleto 
     let documento 
-    let area 
+    let area
+    let motivo = response.queryResult.queryText || "Ocurrio un error al cargar la sugerencia" 
 
     if (!nombreCompleto || !documento) {
       const contexts = response.queryResult.outputContexts || [];
@@ -108,7 +109,8 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
     await state.update({
       documento: documento,
       nombreCompleto: nombreCompleto,
-      area: area || " (CORREGIR)"
+      area: area || " (CORREGIR)",
+      motivo
     });
 
     return gotoFlow(sugerenciasFlow);
