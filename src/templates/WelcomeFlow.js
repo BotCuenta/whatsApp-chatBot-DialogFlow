@@ -86,7 +86,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
           const params = context.parameters;
           nombreCompleto = params.fields.nombreCompleto?.stringValue;
           documento = params.fields.documento?.stringValue;
-          area = params.fields.areasentity?.stringValue;
+          area = params.fields.areasugerencia?.stringValue;
         }
 
       });
@@ -113,55 +113,43 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 
   // Detectar cuando un usuario quiere cargar un reclamo
   if (
-    response.queryResult.intent &&
-    response.queryResult.intent.displayName.startsWith("Reclamos") &&
-    response.queryResult.intent.displayName != "Reclamos"
+    response.queryResult.intent.displayName == "Reclamos - area - detalle"
   ) {
-    let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
-    let documento = response.queryResult.parameters?.documento;
-
+    let nombreCompleto 
+    let documento 
+    let area
+    let motivo = response.queryResult.queryText || "(CORREGIR TEXTQUERY)"
+    console.log(JSON.stringify(response.queryResult));
+    
     if (!nombreCompleto || !documento) {
       const contexts = response.queryResult.outputContexts || [];
       contexts.forEach((context) => {
         if (context.name.includes("bienvenido-followup")) {
           const params = context.parameters;
-          nombreCompleto = params.fields.nombreCompleto.stringValue;
-          documento = params.fields.documento.stringValue;
+          nombreCompleto = params.fields.nombreCompleto?.stringValue;
+          documento = params.fields.documento?.stringValue;
+          area = params.fields.areareclamo?.stringValue;
         }
+
       });
     }
 
-    if (!nombreCompleto || !documento) {
+    if (!nombreCompleto || !documento || !area) {
+      console.log(`${nombreCompleto} ${documento} ${area} ${motivo}`);
       return await flowDynamic([
         {
           header: "End",
-          body: "No existen los parámetros necesarios",
-          buttons: [{ body: "Volver al inicio" }],
+          body: "Ocurrio un error...¿Me podrías recordar tu nombre?",
         },
       ]);
     }
-
-    let intentName = response.queryResult.intent.displayName;
-    let additionalData = "";
-
-    if (intentName === "Reclamos - Servicios Públicos-4") {
-      additionalData = "Servicios Públicos";
-    } else if (intentName === "Reclamos - Defensa del consumidor-1") {
-      additionalData = "Defensa del Consumidor";
-    } else if (intentName === "Reclamos - Juventud-3") {
-      additionalData = "Juventud";
-    } else if (intentName === "Reclamos - Defensoría Itinerante-5") {
-      additionalData = "Defensoría Itinerante";
-    } else if (intentName === "Reclamos - Derechos del Inquilino-2") {
-      additionalData = "Derechos de Inquilinos";
-    }
-
     await state.update({
       documento: documento,
       nombreCompleto: nombreCompleto,
-      area: additionalData,
-      inReclamoFlow: true // Indicamos que se inicia el flujo de reclamos
+      area: area ,
+      motivo
     });
+
     return gotoFlow(reclamosFlow);
   }
 
