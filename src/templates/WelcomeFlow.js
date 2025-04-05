@@ -58,8 +58,7 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
       return await flowDynamic([
         {
           header: "End",
-          body: "No existen los parámetros necesarios",
-          buttons: [{ body: "Volver al inicio" }],
+          body: "¿Me podrías recordar tu nombre?",
         },
       ]);
     }
@@ -77,11 +76,11 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
 
   // Detectar cuando un usuario quiera cargar una sugerencia
   if (
-    response.queryResult.intent &&
-    response.queryResult.intent.displayName == "Sugerencias"
+    response.queryResult.intent.displayName == "Sugerencias - area"
   ) {
-    let nombreCompleto = response.queryResult.parameters?.nombreCompleto;
-    let documento = response.queryResult.parameters?.documento;
+    let nombreCompleto 
+    let documento 
+    let area 
 
     if (!nombreCompleto || !documento) {
       const contexts = response.queryResult.outputContexts || [];
@@ -91,21 +90,25 @@ const welcomeFlow = addKeyword(EVENTS.WELCOME).addAction(async (ctx, ctxFn) => {
           nombreCompleto = params.fields.nombreCompleto.stringValue;
           documento = params.fields.documento.stringValue;
         }
+        if (context.name,includes("sugerencias-followup")){
+          const params = context.parameters;
+          area = params.fields.areasentity.stringValue;
+        }
       });
     }
 
-    if (!nombreCompleto || !documento) {
+    if (!nombreCompleto || !documento || !area) {
       return await flowDynamic([
         {
           header: "End",
-          body: "No existen los parámetros necesarios",
-          buttons: [{ body: "Volver al inicio" }],
+          body: "Ocurrio un error...¿Me podrías recordar tu nombre?",
         },
       ]);
     }
     await state.update({
       documento: documento,
       nombreCompleto: nombreCompleto,
+      area: area || " (CORREGIR)"
     });
 
     return gotoFlow(sugerenciasFlow);
